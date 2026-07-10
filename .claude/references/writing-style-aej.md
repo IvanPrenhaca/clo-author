@@ -99,16 +99,17 @@ AEJ introductions are **long (roughly 3–5 pages / 8–14 paragraphs)** and fol
 - **Verbs of estimation and evidence, not of belief:** find, document, observe, show, reveal, confirm, uncover, estimate, leverage, exploit. Avoid "we believe/feel/think."
 
 ### 3.2 Reporting an effect — the canonical sentence shape
-**Magnitude + unit first, statistical qualifier in parentheses second, interpretation third.**
+**Magnitude + unit first, significance in words second, interpretation third — significance stated inline, not in parentheses.**
 
-- "food security increased by over 0.5 standard deviations in the first six months (statistically significant at 1 percent) but then fell to approximately 0.25 standard deviations by the 8th month." (Ag)
-- "household access to trash collection and sewage increases by 4.4 and 1 percentage points (with the former being significant at the 10 percent level)." (GS)
-- "reducing operations with an elasticity of +0.164 for revenue and +1.03 for investment (statistically distinguishable from zero at conventional levels)." (C&L)
+Carry the magnitude and the significance in the prose itself: "wages fell 1.8 percent," "a precise zero," "statistically indistinguishable from zero," "significant at the 5 percent level," "rules out effects larger than two percentage points." The standard error and stars live in the table; the sentence carries the economics. A brief parenthetical qualifier — "(significant at the 1 percent level)", "(indistinguishable from zero at conventional levels)" — is an acceptable variant, and the published corpus uses it, but **inline is preferred**: it reads less like regression output, and it matches the author's own practice, which uses the parenthetical form essentially never.
+
+- Corpus examples of the parenthetical variant (acceptable, not the default): "increased by over 0.5 standard deviations… (statistically significant at 1 percent)" (Ag); "increases by 4.4 and 1 percentage points (with the former being significant at the 10 percent level)" (GS); "an elasticity of +0.164 for revenue… (statistically distinguishable from zero at conventional levels)" (C&L).
 
 **Rules:**
 - Never report significance without the magnitude. "The coefficient is significant" is banned (already in `writer.md`); the corpus never does it.
-- Significance is phrased **"significant at the 1/5/10 percent level"** or **"(statistically) distinguishable / indistinguishable from zero at conventional levels."** Spell out *percent* in prose.
-- Give the **economic** meaning alongside the statistical one: convert to a share of a baseline, a dollar figure, or an elasticity ("these expenditures, which account for 16 percent of total municipal expenditures…").
+- **Never put a raw p-value or a standard error in a prose sentence** — no "(p<0.001)", no "(standard error 0.006)". Significance goes in words; the SE and stars live in the table.
+- Phrase significance as **"significant at the 1/5/10 percent level"** or **"(statistically) distinguishable / indistinguishable from zero at conventional levels,"** woven into the sentence rather than parenthesized. Spell out *percent* in prose.
+- Give the **economic** meaning alongside the statistical one: convert to a share of a baseline, a dollar figure, or an elasticity.
 - Restate a pivotal result in plainer terms with **"Put differently,"** when it aids intuition (C&L).
 
 ### 3.3 Citations inside sentences
