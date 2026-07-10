@@ -6,6 +6,24 @@ All notable changes to the Clo-Author are documented here.
 
 ---
 
+## [Unreleased]
+
+### AEA House Writing Style (`writing-style-aej.md`)
+
+New shipped reference `.claude/references/writing-style-aej.md` — the AEA house writing style
+(structure, cadence, editorial convention, and the effect-reporting sentence shape), calibrated
+to three AEJ: Applied Economics papers plus the AEA style guide. The `writer` agent now loads it
+as the **baseline voice** and, when `personal-style-guide.md` is still the template, drafts to the
+AEA house style instead of stopping or falling back to a generic academic voice.
+
+Fixes a recurring failure: with an unpopulated `personal-style-guide.md`, drafts came out in a
+"regression-dump" register — raw `(p<0.001)` and standard errors inside prose sentences, "%" for
+"percent", em-dash overuse. The house style mandates **magnitude + unit + significance in words**
+("significant at the 1 percent level" / "indistinguishable from zero at conventional levels"), with
+standard errors and stars confined to tables; the writer-critic deducts on violations (§9.2).
+
+---
+
 ## [26.05] — May 2026
 
 ### HTML Report Pipeline
