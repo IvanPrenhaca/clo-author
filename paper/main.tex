@@ -50,7 +50,7 @@
 
 \raggedbottom
 
-\title{Chronic Intestinal Failure in Brazil: A First Estimative of Prevalence}
+\title{Chronic Intestinal Failure in Brazil: A First Estimate of Prevalence}
 
 \author{}
 \date{}
@@ -150,7 +150,7 @@ This study used exclusively anonymized, publicly available administrative data f
 
 \subsection*{Prevalence of Chronic Intestinal Failure: Parenteral Nutrition-Based Estimates}
 
-Between January 2017 and December 2025, a total of 198,769 hospital admissions (AIHs) of patients aged 0 to 17 years were recorded in the SIH-SUS with at least one parenteral nutrition procedure (Table~\ref{tab:pn_17anos}). After applying the patient-matching procedure described in the Methods, these admissions corresponded to 150,078 unique patients, of whom 53.6\% were male. The vast majority of patients --- 145,029 (96.6\%) --- had admissions with fewer than 30 daily units of PN recorded, consistent with acute or post-surgical nutritional support rather than chronic intestinal failure. A total of 971 patients (0.65\%) had at least one admission with 60 or more daily units of PN, meeting the operational definition of CIF adopted in this study. Among these, 37.4\% were discharged with clinical improvement (\textit{alta melhorada}) and 6.5\% died during hospitalization.
+Between January 2017 and December 2025, a total of 198,769 hospital admissions (AIHs) of patients aged 0 to 17 years were recorded in the SIH-SUS with at least one parenteral nutrition procedure (Table~\ref{tab:pn_17anos}). After applying the patient-matching procedure described in the Methods, these admissions corresponded to 150,078 unique patients, of whom 53.6\% were male. The vast majority of patients --- 145,029 (96.6\%) --- had admissions with fewer than 30 daily units of PN recorded, consistent with acute or post-surgical nutritional support rather than chronic intestinal failure. A total of 971 patients (0.65\%) had at least one admission with 60 or more daily units of PN, meeting the operational definition of CIF adopted in this study. Among these, 37.4\% were discharged with clinical improvement (\textit{alta melhorada}, an SIH-SUS administrative discharge-reason code rather than an independently adjudicated clinical outcome) and 6.5\% died during hospitalization.
 
 Annual prevalence estimates, presented in Table~\ref{tab:prevalencia_17anos}, show a consistent pattern across the study period. In the pre-pandemic years (2017--2019), prevalence ranged from 3.90 to 4.25 cases per million children and adolescents aged 0 to 17 years, with a mean of 4.12 cases per million. A marked decline was observed during the COVID-19 pandemic years of 2020 and 2021, when prevalence fell to 3.26 and 2.53 cases per million, reductions of approximately 23\% and 40\% relative to the pre-pandemic mean. In the post-pandemic period (2022--2025), prevalence partially recovered but did not return to pre-pandemic levels, stabilising at approximately 3.15--3.25 cases per million in 2022 and 2023, and declining again to 2.46 cases per million in 2025. The mean annual prevalence of CIF across the full study period was 3.35 cases per million children and adolescents aged 0 to 17 years. Figure~\ref{fig:fic_por_ano} illustrates the absolute number of CIF patients per year identified through the SUS, making the temporal pattern of decline and partial recovery visually evident.
 
@@ -242,7 +242,7 @@ The mean age of patients at admission was markedly low, remaining below 1.5 year
 
 \subsubsection*{Race and Ethnicity}
 
-The proportion of white patients in the CIF cohort exceeded their share in the general Brazilian population throughout most of the study period, ranging from approximately 42\% to 52\% (Figure~\ref{fig:raca}). While this finding should be interpreted cautiously given the known underreporting of race/ethnicity in SIH-SUS records, it is nonetheless suggestive of differential access to prolonged hospital-based parenteral nutrition across racial groups. A pattern that, represent a significant equity concern in the management of a condition whose outcomes are strongly dependent on the timely and sustained availability of this treatment.
+The proportion of white patients in the CIF cohort exceeded their share in the general Brazilian population throughout most of the study period, ranging from approximately 42\% to 52\% (Figure~\ref{fig:raca}). This pattern must be read with caution. Race and ethnicity are substantially underreported in SIH-SUS records---the same incompleteness that led us to exclude the field from the linkage algorithm---so the observed distribution may reflect differential completeness of race recording across regions and facilities as much as any real difference in who reaches care. We therefore report the figure descriptively and do not treat it as established evidence of differential access; whether access to prolonged hospital-based parenteral nutrition varies by race is a question this data source cannot settle.
 
 \begin{figure}[H]
     \centering
@@ -396,11 +396,11 @@ Placed against the international literature, the estimate sits well below the ra
 
 The most direct point of comparison comes from a recent United States claims-database analysis, which identified pediatric SBS-associated intestinal failure at approximately 9 per million using a PN-claims proxy with patient-level deduplication \cite{ali2025epidemiology}. This estimate is instructive on two counts. First, it is the closest methodological analogue to the present study, and it independently confirms that a PN-based proxy applied to routinely collected billing records is a legitimate route to CIF ascertainment. Second, that a claims-based approach in the United States returns a figure well below the survey- and registry-based US benchmark reinforces the reading of our own result: administrative case-finding recovers a floor, not a ceiling. The remaining gap between the Brazilian and US claims-based figures is consistent with the access barriers documented throughout the Results.
 
-The methodological choices made here have direct precedent. In the absence of a unique diagnostic code, procedure-based proxies have been used to study SBS in large administrative systems: analyses of the US Kids' Inpatient Database identified cases through procedure codes precisely because SBS lacks a dedicated identifier, albeit at the discharge rather than the patient level \cite{pant2017epidemiology}. Our patient-level linkage addresses that discharge-versus-patient limitation, and it does so using an approach already applied to Brazilian de-identified administrative health records, where deterministic matching on fields such as date of birth, municipality, and postal code has been shown to recover individual episodes reliably \cite{medinacoeli2025deterministic}. Both the PN proxy and the linkage strategy therefore rest on established methods rather than novel assumptions.
+The methodological choices made here have direct precedent. In the absence of a unique diagnostic code, procedure-based proxies have been used to study SBS in large administrative systems: analyses of the US Kids' Inpatient Database identified cases through procedure codes precisely because SBS lacks a dedicated identifier, albeit at the discharge rather than the patient level \cite{pant2017epidemiology}. Our patient-level linkage addresses that discharge-versus-patient limitation. Deterministic matching on fields such as date of birth, municipality, and postal code has been applied to Brazilian de-identified administrative health records in other settings \cite{medinacoeli2025deterministic}; we adapt that general approach to the pediatric CIF context, and its accuracy in this specific population, particularly the risk of merging multiple-birth siblings who share a postal code and date of birth, is a limitation we return to below. The PN proxy and the linkage strategy thus build on methods used elsewhere in administrative-data research, applied here to a population in which their error properties have not previously been characterized.
 
 The middle-income context further frames the interpretation. The RESTORE registry, spanning twenty Latin American centers, documents a pediatric SBS-associated intestinal failure population whose leading etiologies---intestinal atresia, necrotizing enterocolitis, and gastroschisis---closely mirror the neonatal-morbidity profile observed in our data \cite{rumbo2024restore}. Within Brazil, a recent multicenter study of 207 patients across three centers in São Paulo and Rio Grande do Sul characterized intestinal rehabilitation in the country as constrained by limited financial resources, insufficient access to the few reference centers, inadequate multidisciplinary training, diagnostic delay driven by low disease awareness, and structural obstacles to home parenteral nutrition \cite{leite2025multicenter}. That study reported no general population figures for Brazil, which is the precise void this analysis addresses.
 
-The trajectory of the estimates over time reinforces the access-barrier interpretation. The sharp decline in recorded cases during 2020 and 2021 is implausible as a fall in true incidence, since CIF arises predominantly from congenital and neonatal conditions unaffected by a pandemic over such a horizon. It is far more consistent with the documented disruption of pediatric CIF care during COVID-19, when constrained hospital capacity curtailed access to the prolonged parenteral nutrition on which case identification depends \cite{hilberath2024impact}. The failure of case counts to return to pre-pandemic levels in subsequent years is compatible with a portion of that cohort not surviving to be counted, a hidden mortality that the administrative record cannot observe directly.
+The trajectory of the estimates over time reinforces the access-barrier interpretation. The sharp decline in recorded cases during 2020 and 2021 is implausible as a fall in true incidence, since CIF arises predominantly from congenital and neonatal conditions unaffected by a pandemic over such a horizon. It is far more consistent with the documented disruption of pediatric CIF care during COVID-19, when constrained hospital capacity curtailed access to the prolonged parenteral nutrition on which case identification depends \cite{hilberath2024impact}. The failure of case counts to return to pre-pandemic levels in subsequent years is compatible with a portion of that cohort not surviving to be counted. We advance this hidden-mortality interpretation as a hypothesis rather than a finding: the administrative record cannot observe deaths outside the hospital system, and our data cannot distinguish non-survival from other explanations, such as a lasting contraction of access or shifts in coding practice.
 
 The geographic findings expose a second structural problem. Treating hospitals were concentrated in a small number of South and Southeast centers, more than half of identified patients traveled outside their municipality of residence, and mean travel distance approached 70 km. The cross-validation using the 2024 CIF-specific code sharpened this picture: the two institutions accounting for essentially all coded admissions include the Hospital de Clínicas de Porto Alegre, which operates Brazil's most established pediatric intestinal-rehabilitation program \cite{goldani2022outcomes}. That a single mature program dominates the diagnosis-specific record is less a statement about where disease occurs than about where the infrastructure to diagnose, treat, and correctly code it exists. The near-total absence of identified cases in the North, Northeast, and Central-West points to unmet need concentrated where specialized capacity is thinnest.
 
@@ -443,14 +443,15 @@ Not applicable due to the nature of the study being work public data.
 The datasets and codes generated during the current study are available from the corresponding author on reasonable
 request.
 
-\newpage
-\begin{appendices}
-
-\section{First appendix}\label{secA1}
-
-[Final]
-
-\end{appendices}
+% Appendix scaffold — populate before submission with, e.g., the STROBE
+% participant-flow diagram, the ICD-10 code appendix for the diagnosis/procedure
+% tables, and the threshold/scaling sensitivity analyses requested in review.
+% Commented out so the empty placeholder does not render.
+% \newpage
+% \begin{appendices}
+% \section{First appendix}\label{secA1}
+% [Final]
+% \end{appendices}
 
 
 \newpage
