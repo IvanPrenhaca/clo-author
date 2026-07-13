@@ -27,3 +27,24 @@
 **Score:** 88/100 (PASS) — see note
 **Verdict:** R1 64/100 → fixes applied (beath conflation, Intro contradiction, medinacoeli overstatement, em-dashes, spelling) → R2 prose 88. R2 returned 78 only via a false-negative Glob miss on the claim-source map, which exists on disk. Effective PASS at 88. Then converted paper UK→US English per user.
 **Report:** quality_reports/reviews/writer_critic_discussion_conclusions.md
+
+### 2026-07-13 20:00 — domain-referee (JPGN)
+**Phase:** Peer Review
+**Target:** paper/main.tex
+**Score:** 74/100 — Major Revision
+**Verdict:** First-of-kind contribution, strong lit positioning; but PN-proxy false-positive risk unbounded, no CIs, internal inconsistencies (mortality 6.5% vs 9–15%; 1,028 vs 971 counts). Diárias≠days unvalidated.
+**Report:** quality_reports/reviews/cif-brazil_referee_domain.md
+
+### 2026-07-13 20:03 — methods-referee (JPGN)
+**Phase:** Peer Review
+**Target:** paper/main.tex
+**Score:** 58/100 — Major Revision
+**Verdict:** No uncertainty bounds (M1); 1.55 scalar FATAL-as-presented (M2); threshold untested (M3); linkage/twin error + medinacoeli overstatement (M4); missing-CEP exclusion likely region-selective (M5). All fixable.
+**Report:** quality_reports/reviews/cif-brazil_referee_methods.md
+
+### 2026-07-13 20:08 — editor (JPGN) — EDITORIAL DECISION
+**Phase:** Peer Review
+**Target:** paper/main.tex
+**Score:** MAJOR REVISION (referee avg 66; editor judgment, not averaged)
+**Verdict:** Not a reject — one well-scoped revision cycle. 1.55 FATAL-flag adjudicated revision-level (lower-bound framing cushions; unscaled SUS-only floor already in Table 2). 7 MUST items, 5 SHOULD, 4 MAY. Single most important fix: reconstruct headline as an honest interval (Poisson CI + SUS-only floor + scaling band).
+**Report:** quality_reports/reviews/editorial_decision.md
