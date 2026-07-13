@@ -12,3 +12,16 @@ ensure_path('BIBINPUTS', '..//');
 
 # Silence — stop on errors but don't pause
 $xelatex = 'xelatex -interaction=nonstopmode %O %S';
+
+# ---------------------------------------------------------------------------
+# Keep auxiliary/temporary files out of the paper/ folder.
+# All build artifacts (.aux, .log, .bbl, .xdv, .out, .fls, .fdb_latexmk, ...)
+# are written to paper/build/. The final PDF is then copied back next to
+# main.tex so it is easy to find. (Overleaf ignores $out_dir and $aux_dir.)
+# ---------------------------------------------------------------------------
+$out_dir = 'build';
+$aux_dir = 'build';
+
+# Copy the finished PDF from build/ back to paper/main.pdf
+$success_cmd = 'cp %Y%R.pdf %R.pdf';
+$compiling_cmd = '';
