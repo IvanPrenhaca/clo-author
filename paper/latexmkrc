@@ -22,10 +22,6 @@ $xelatex = 'xelatex -interaction=nonstopmode %O %S';
 $out_dir = 'build';
 $aux_dir = 'build';
 
-# Also keep latexmk's own database (.fdb_latexmk) and the .fls file in build/
-$fdb_ext = 'fdb_latexmk';   # (default name; kept for clarity)
-ensure_path('TEXINPUTS', './build//');
-
 # Copy the finished PDF from build/ back to paper/main.pdf so it sits next to
 # the source. Explicit relative paths avoid Windows quoting issues with %Y/%R.
 $success_cmd = 'cp build/main.pdf main.pdf';
