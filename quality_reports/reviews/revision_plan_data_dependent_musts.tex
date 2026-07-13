@@ -1,0 +1,350 @@
+\documentclass[11pt,a4paper]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Standalone revision plan — data-dependent MUST items (JPGN Major Revision)
+%% Self-contained: compile with either pdflatex or xelatex, e.g.
+%%     pdflatex revision_plan_data_dependent_musts.tex
+%% No bibliography, no external files required.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% Colored links (blue, no boxes) — hyperref loaded late
+\definecolor{citeblue}{RGB}{0,0,255}
+\usepackage[colorlinks=true, allcolors=citeblue, breaklinks=true]{hyperref}
+
+% ---- Light styling for the two recurring block types (framed pkg only) ----
+\definecolor{paperbg}{RGB}{244,244,240}
+\definecolor{refbg}{RGB}{238,242,248}
+\definecolor{rulegray}{RGB}{170,170,170}
+
+% A shaded environment with a thin left rule, colored by \FrameColor/\ShadeColor.
+% "What the paper says" block — ivory background
+\newenvironment{papersays}%
+  {\def\FrameCommand{{\color{rulegray}\vrule width 1.5pt}\hspace{6pt}%
+     \colorbox{paperbg}}%
+   \MakeFramed{\advance\hsize-\width \FrameRestore}\small}%
+  {\endMakeFramed}
+
+% "Referee says" block — light blue background
+\newenvironment{refereesays}%
+  {\def\FrameCommand{{\color{rulegray}\vrule width 1.5pt}\hspace{6pt}%
+     \colorbox{refbg}}%
+   \MakeFramed{\advance\hsize-\width \FrameRestore}\small\itshape}%
+  {\endMakeFramed}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\title{\textbf{Revision Plan --- Data-Dependent MUST Items}\\[2pt]
+\large JPGN Major Revision}
+\author{Chronic Intestinal Failure in Brazil: A First Estimate of Prevalence}
+\date{2026-07-13}
+
+\begin{document}
+\maketitle
+
+\noindent
+This document lists the MUST items from the JPGN Major Revision that \textbf{cannot be
+done from the manuscript alone}: each requires re-running or extending the analysis on the
+underlying SIH-SUS data. The \texttt{scripts/} directory is currently empty, so the analysis
+that produced 3.35/million, the 971-patient cohort, and all figures is not yet in the repo.
+Every item below is blocked on bringing that data/code into the project.
+
+The text-only fixes (title, linkage-precedent softening, hidden-mortality down-tone,
+race/equity reframing, ``alta melhorada'' definition, appendix placeholder) were already
+applied in commit \texttt{ed3d7e0} and are not repeated here.
+
+\medskip
+\hrule
+\medskip
+
+\newcommand{\papersaysHead}{\textit{What the paper currently says.}}
+\newcommand{\refereeHead}{\textit{What the referees said.}}
+\newcommand{\whyHead}{\textbf{Why data is required.}}
+\newcommand{\opHead}{\textbf{Data operation.}}
+
+%======================================================================
+\section{Reconcile the 1,028-vs-971 count; define the estimand}
+%======================================================================
+
+\papersaysHead\ Results (line 153):
+\begin{papersays}
+``these admissions corresponded to \textbf{150,078 unique patients} \ldots A total of
+\textbf{971 patients} (0.65\%) had at least one admission with 60 or more daily units of PN,
+meeting the operational definition of CIF''
+\end{papersays}
+But Table~2 (\texttt{tab:prevalencia\_17anos}) lists annual ``No.\ of SUS cases'' as
+148, 136, 147, 112, 86, 106, 108, 105, 80 --- which \textbf{sum to 1,028} [verified], while the
+text's unique-patient total is \textbf{971}.
+
+\refereeHead\ Methods (m1):
+\begin{refereesays}
+``the nine annual SUS-case counts in Table~2 \ldots sum to \textbf{1,028}, but the text
+reports \textbf{971 unique CIF patients} \ldots This is defensible but must be stated
+explicitly --- otherwise the table appears arithmetically inconsistent with the headline N.''
+\end{refereesays}
+Domain (M3b):
+\begin{refereesays}
+``a \textit{period prevalence} built by summing annual counts double-counts persistent
+patients across years, which is conceptually inconsistent with `unique patients.'\,''
+\end{refereesays}
+
+\whyHead\ The 57-patient gap is presumably patients with qualifying admissions in
+$\geq 2$ calendar years (counted once in 971, once per year in Table~2), but this cannot be
+confirmed from the manuscript.
+
+\opHead
+\begin{enumerate}[leftmargin=*, topsep=2pt]
+  \item Query the patient-level dataset: how many unique patients have qualifying admissions
+        in $\geq 2$ calendar years? Confirm it explains $1{,}028 - 971 = 57$.
+  \item Decide and state the \textbf{estimand} (period vs point prevalence); add one sentence
+        to Methods $+$ a Table~2 footnote.
+\end{enumerate}
+
+%======================================================================
+\section{Add confidence intervals everywhere}
+%======================================================================
+
+\papersaysHead\ Every figure is a bare point estimate. Results ($\sim$line 155):
+\begin{papersays}
+``prevalence fell to 3.26 and 2.53 cases per million, reductions of approximately
+\textbf{23\% and 40\%} relative to the pre-pandemic mean''
+\end{papersays}
+Table~2 reports ``Prevalence (per million)'' as single numbers (4.20 \ldots 2.46), no interval.
+
+\refereeHead\ Methods (M1, ``the single most serious defect''):
+\begin{refereesays}
+``a Poisson 95\% CI on 80 observed cases is roughly \textbf{$\pm$22\%}. A clinical readership
+will not accept year-over-year `declines' asserted from counts this small without at least
+Poisson/exact intervals.''
+\end{refereesays}
+Domain (M2, ``non-negotiable for this journal''):
+\begin{refereesays}
+``Report exact (Poisson/binomial) confidence intervals for each annual prevalence and for
+mortality.''
+\end{refereesays}
+
+\whyHead\ CIs are computed quantities. Annual prevalence CIs need the case count $+$
+denominator (both in Table~2); the pandemic ``23\%/40\% decline'' should become a
+\textbf{rate ratio with CI}; mortality CIs need the CIF-cohort numerator/denominator (see \S5).
+
+\opHead\ R: \texttt{poisson.test} / \texttt{epitools::pois.exact} for each annual prevalence
+and mortality; rate-ratio-with-CI for the pandemic comparison. Regenerate Table~2 with
+interval columns.
+
+%======================================================================
+\section{Rebuild the headline as a scaling sensitivity band (editor's \#1 priority)}
+%======================================================================
+
+\papersaysHead\ Methods, scaling equation:
+\begin{papersays}
+``the total estimated number of cases in year $t$ was obtained by scaling the observed SUS
+count by a factor of \textbf{1.55}:\quad $N_{\text{total},t} = N_{\text{SUS},t} \times 1.55$''
+\end{papersays}
+This single scalar produces the headline \textbf{3.35/million}.
+
+\refereeHead\ This is the \textbf{FATAL-as-presented} flag. Methods (M2):
+\begin{refereesays}
+``the entire non-SUS column of Table~2 is mechanically $0.55 \times N_{\text{SUS}}$ \ldots the
+reader cannot separate `signal' from `this one scalar' \ldots 1.55 may \textit{overstate} the
+private share --- meaning the direction of bias is not even signed.''
+\end{refereesays}
+Editor (single most important revision):
+\begin{refereesays}
+``Reconstruct the headline as an \textit{honest interval rather than a point estimate} \ldots
+anchor it on the unscaled SUS-only floor, flank the 1.55 with a sensitivity band.''
+\end{refereesays}
+
+\whyHead\ Prevalence must be recomputed under a grid of scaling assumptions.
+
+\opHead
+\begin{itemize}[leftmargin=*, topsep=2pt]
+  \item $\times 1.0$ (unscaled SUS-only) $=$ strict lower bound $\rightarrow$ promote to
+        \textit{primary} estimate.
+  \item $\times 1.55$ $=$ current central estimate.
+  \item Upper bound from the all-cause PNS split at its plausible range.
+  \item Ideally anchor a \textit{disease-specific} SUS share (where RESTORE/Leite/Goldani
+        Brazilian cohorts were treated --- predominantly public centers).
+  \item Report the national estimate as a \textbf{range}; regenerate Table~2 / the headline.
+\end{itemize}
+
+%======================================================================
+\section{Validate that ``di\'{a}rias'' (daily units) $=$ days; resolve the 288 contradiction}
+%======================================================================
+
+\papersaysHead\ Definition (Methods):
+\begin{papersays}
+``parenteral nutrition (PN) support for at least \textbf{60 days} within a consecutive
+74-day interval''
+\end{papersays}
+Operationalization:
+\begin{papersays}
+``we retained only those in which the recorded duration of the PN procedure was
+\textbf{60 daily units (di\'{a}rias) or more}''
+\end{papersays}
+Table~1 reports a \textbf{``Max daily units'' of 288 in 2020} --- which exceeds a 74-day window.
+
+\refereeHead\ Domain (M1, ``the single most important validity question for the whole paper''):
+\begin{refereesays}
+``In SIH-SUS the `di\'{a}ria' is a billing/reimbursement unit, not a guaranteed
+one-per-calendar-day count. If a patient can accrue more than one PN di\'{a}ria per day \ldots
+then the count is not a clean day-count and the 60-di\'{a}ria threshold does not map 1:1 to the
+60-day ASPEN criterion.''
+\end{refereesays}
+Methods (m5):
+\begin{refereesays}
+``Table~1 `Max daily units' of 288 in 2020 \ldots \textbf{exceeds the number of days that could
+plausibly accrue in a 74-day window}; if daily units accumulate across a full year or across
+linked admissions, the 74-day-window definition is again ambiguous.''
+\end{refereesays}
+
+\whyHead\ Requires the DATASUS codebook $+$ inspection of raw records.
+
+\opHead
+\begin{enumerate}[leftmargin=*, topsep=2pt]
+  \item Confirm from the DATASUS data dictionary whether one AIH ever bills $>1$ PN
+        di\'{a}ria/calendar day; cite it (or correct the mapping). The 288 value suggests
+        di\'{a}rias accumulate across multiple linked admissions.
+  \item State precisely, from the actual code, whether the 60/74 criterion is applied
+        \textbf{within a single admission} or \textbf{cumulatively across linked admissions},
+        and how the 74-day window is enforced.
+\end{enumerate}
+
+%======================================================================
+\section{Fix the mortality inconsistency (which figure is the CIF cohort's?)}
+%======================================================================
+
+\papersaysHead\ Three different numbers a reader takes as the same thing:
+\begin{papersays}
+\begin{itemize}[leftmargin=1.2em, topsep=1pt, itemsep=1pt]
+  \item \textbf{Abstract:} ``In-hospital mortality ranged from \textbf{9\% to 15\%}''
+  \item \textbf{Results, 971-cohort (line 153):} ``\textbf{6.5\%} died during hospitalization''
+  \item \textbf{Table~1} (\texttt{tab:pn\_17anos}, ``\% Deaths''): 11.9\%--15.0\% --- but for
+        \textbf{all 198,769 PN admissions}, not the 971 CIF patients.
+\end{itemize}
+\end{papersays}
+
+\refereeHead\ Domain (M3a):
+\begin{refereesays}
+``the `9--15\%' quoted for CIF appears to be borrowing the all-PN mortality column \ldots a
+reader cannot tell whether CIF-cohort mortality is $\sim$6.5\% or $\sim$9--15\%, and the
+Discussion's comparison to high-income survival ($\geq$85\%) hinges on getting this right.''
+\end{refereesays}
+
+\whyHead\ The correct cohort-specific mortality must be computed from the patient-level data.
+Figure \texttt{fig:obito} appears to show all-PN mortality, not CIF-cohort mortality, and may
+need regenerating.
+
+\opHead\ Compute in-hospital mortality for the 971-patient CIF cohort (overall $+$ annual for
+\texttt{fig:obito}); use that single figure consistently in abstract, Results, Discussion.
+
+%======================================================================
+\section{Quantify the missing-CEP exclusion and test for regional selectivity}
+%======================================================================
+
+\papersaysHead\ Methods:
+\begin{papersays}
+``Admissions with missing postal code information were excluded from the analysis, as the
+absence of this field precludes reliable patient matching.''
+\end{papersays}
+No count is given for how many admissions/patients this removes.
+
+\refereeHead\ Methods (M5, ``potentially large''; the most consequential distinct concern):
+\begin{refereesays}
+``missing CEP is unlikely to be random --- it plausibly correlates with the
+North/Northeast/Central-West underserved regions the paper's central argument concerns. If
+missingness is concentrated in exactly the regions claimed to be underrepresented,
+\textbf{the exclusion mechanically reinforces the paper's headline conclusion}, and the
+`lower bound' framing may be partly an artifact of the exclusion.''
+\end{refereesays}
+
+\whyHead\ Purely empirical; requires the pre-exclusion dataset.
+
+\opHead
+\begin{enumerate}[leftmargin=*, topsep=2pt]
+  \item Count admissions/patients dropped for missing CEP --- \textbf{overall and by region}.
+  \item Compare CEP-present vs CEP-absent admissions on observables (region, age, death).
+  \item A best/worst-case bound on the headline under assumptions about the excluded cases.
+\end{enumerate}
+
+%======================================================================
+\section{(Data half) False-match / twin-collision rate estimate}
+%======================================================================
+
+\textit{Note.} The \textit{text} half (softening the linkage-precedent overclaim, flagging twin
+risk) was already applied in commit \texttt{ed3d7e0}. The \textbf{data half} remains.
+
+\refereeHead\ Methods (M4):
+\begin{refereesays}
+``Twins are the specific concern: same CEP, same DOB, often same sex --- the deterministic rule
+will merge them into one `patient,' \textbf{biasing the count downward} in exactly the
+prematurity-driven population that constitutes the sample.''
+\end{refereesays}
+Suggested internal validation:
+\begin{refereesays}
+``agreement between the deterministic linkage and the CIF-specific-code deduplication on the
+22 code-identified patients''
+\end{refereesays}
+
+\whyHead\ Both are direct data cross-tabulations.
+
+\opHead
+\begin{enumerate}[leftmargin=*, topsep=2pt]
+  \item Count CIF triplets (CEP $+$ sex $+$ DOB) that plausibly represent multiple births
+        merged into one record (same-DOB/CEP/sex clusters); bound the count treating each as
+        1 vs 2 patients.
+  \item \textbf{22-patient overlap check (SHOULD-1):} of the 22 CIF-code patients, how many
+        does the $\geq$60 PN rule independently flag?
+\end{enumerate}
+
+%======================================================================
+\section*{Summary table}
+%======================================================================
+\addcontentsline{toc}{section}{Summary table}
+
+\begin{longtable}{@{}c p{4.3cm} p{6.6cm}@{}}
+\toprule
+\textbf{MUST} & \textbf{One-line need} & \textbf{Data operation} \\
+\midrule
+\endhead
+1 & Explain 1,028 vs 971 & Count patients appearing in $\geq$2 years \\
+2 & Confidence intervals & Poisson/binomial CIs on counts ($+$ rate ratio for pandemic) \\
+3 & Scaling band & Recompute prevalence at $\times$1.0 / $\times$1.55 / upper \\
+4 & di\'{a}rias $=$ days? & Inspect codebook $+$ confirm windowing logic \\
+5 & Correct mortality & Compute mortality on the 971 cohort \\
+6 & Missing-CEP bias & Count exclusions by region; compare observables \\
+7 (data) & Twin/false-match rate & Count same-DOB/CEP/sex clusters; 22-patient overlap \\
+\bottomrule
+\end{longtable}
+
+%======================================================================
+\section*{Blocker}
+%======================================================================
+\texttt{scripts/} is empty and no SIH-SUS extract is in \texttt{data/}. Every item above needs
+either the analysis code or the underlying data extract brought into the project. Once present,
+the \texttt{coder} $+$ \texttt{data-engineer} agents can implement all seven MUSTs and
+regenerate the affected tables (\texttt{tab:pn\_17anos}, \texttt{tab:prevalencia\_17anos}) and
+figures (esp.\ \texttt{fig:obito}).
+
+\medskip
+\textbf{Related files.}
+\begin{itemize}[leftmargin=*, topsep=2pt]
+  \item \texttt{quality\_reports/reviews/editorial\_decision.md} --- full MUST/SHOULD/MAY list
+  \item \texttt{quality\_reports/reviews/cif-brazil\_referee\_domain.md}
+  \item \texttt{quality\_reports/reviews/cif-brazil\_referee\_methods.md}
+  \item Text fixes already applied: commit \texttt{ed3d7e0}
+\end{itemize}
+
+\end{document}
