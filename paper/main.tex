@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Standard-LaTeX version of the manuscript.
@@ -21,6 +21,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{listings}
+\usepackage{setspace}
 \usepackage{adjustbox}
 \usepackage{float}          % enables the [H] float placement used below
 \usepackage[margin=1in]{geometry}
@@ -51,15 +52,7 @@
 
 \title{Chronic Intestinal Failure in Brazil: A First Estimative of Prevalence}
 
-\author{
-  Carolina Melo\thanks{Insper Institute of Education and Research, Quat\'{a} Street, 300, S\~{a}o Paulo, 04546-042, SP, Brazil. \texttt{carolinapgm1@insper.edu.br}} \and
-  Maria Paula Coelho\thanks{Sabar\'{a} Children's Hospital, Ang\'{e}lica Avenue, 1987, S\~{a}o Paulo, 01227-200, SP, Brazil. \texttt{mariapaula.coelho@sabara.com.br}} \and
-  Rog\'{e}rio Carballo Afonso\thanks{Sabar\'{a} Children's Hospital, Ang\'{e}lica Avenue, 1987, S\~{a}o Paulo, 01227-200, SP, Brazil. \texttt{rogerio.carballo@sabara.com.br}} \and
-  Ivan Prenhaca\thanks{Insper Institute of Education and Research, Quat\'{a} Street, 300, S\~{a}o Paulo, 04546-042, SP, Brazil. \texttt{igprenhaca@gmail.com}} \and
-  Monica Magalh\~{a}es\thanks{Pensi Institute, Ang\'{e}lica Avenue, 2016, 7\textordmasculine\ andar, S\~{a}o Paulo, 01227-200, SP, Brazil. \texttt{monica.magalhaes@pensi.org.br}} \and
-  Pedro Soares\thanks{Insper Institute of Education and Research, Quat\'{a} Street, 300, S\~{a}o Paulo, 04546-042, SP, Brazil. \texttt{pedrols5@al.insper.edu.br}} \and
-  Vanessa Boarati\thanks{Pensi Institute, Ang\'{e}lica Avenue, 2016, 7\textordmasculine\ andar, S\~{a}o Paulo, 01227-200, SP, Brazil. \texttt{vanessa.boarati@pensi.org.br}}
-}
+\author{}
 \date{}
 
 \begin{document}
@@ -71,7 +64,7 @@
 \begin{abstract}
 \noindent\textbf{Background} Brazil lacks nationwide epidemiological data on the prevalence of Chronic Intestinal Failure (CIF) among pediatric population, a condition that depends on prolonged parenteral nutrition (PN) support. This study aimed to produce the first national prevalence estimate of pediatric CIF in Brazil and to characterize the demographic, clinical, and geographic profile of affected patients.
 
-\noindent\textbf{Methods} We assessed the prevalence of CIF in the pediatric population (aged 0--17 years) using hospital admission data (AIH) from the Brazilian Public Health System (SIH-SUS\slash DATASUS \citep{datasus_sihsus}), covering 2017--2025. Cases were identified through PN procedures lasting 60 or more daily units within a 74-day interval, with a deterministic record-linkage algorithm (postal code, sex, and date of birth) used to identify unique patients across admissions. SUS-based counts were scaled by a factor of 1.55 to account for private-sector coverage, and annual prevalence was expressed per million children and adolescents.
+\noindent\textbf{Methods} We assessed the prevalence of CIF in the pediatric population (aged 0--17 years) using hospital admission data (AIH) from the Brazilian Public Health System (SIH-SUS\slash DATASUS), covering 2017--2025. Cases were identified through PN procedures lasting 60 or more daily units within a 74-day interval, with a deterministic record-linkage algorithm (postal code, sex, and date of birth) used to identify unique patients across admissions. SUS-based counts were scaled by a factor of 1.55 to account for private-sector coverage, and annual prevalence was expressed per million children and adolescents.
 
 \noindent\textbf{Results} A total of 198,769 PN-related hospital admissions corresponded to 150,078 unique patients, of whom 971 (0.65\%) met the operational definition of CIF. Mean annual prevalence over the study period was 3.35 cases per million children and adolescents aged 0--17, ranging from 4.25 in 2019 to 2.46 in 2025. Prevalence declined sharply during the COVID-19 pandemic, with incomplete recovery in subsequent years. Cases were predominantly associated with prematurity-related neonatal morbidity rather than congenital enteropathies. In-hospital mortality ranged from 9\% to 15\%, and patients traveled a mean of 70 km to access treatment, with more than half requiring travel outside their municipality of residence. A cross-validation using a CIF-specific procedure code introduced in 2024 identified only 22 patients nationwide, concentrated in two hospitals, corroborating substantial underreporting.
 
@@ -81,13 +74,15 @@
 \noindent\textbf{Keywords:} Short Bowel Syndrome, Parenteral Nutrition, Rare Diseases, Brazil
 \end{abstract}
 
+\onehalfspacing
+
 \section{Introduction}\label{sec1}
 
 Despite significant strides in reducing infant mortality over the last few decades, Brazil's progress has stagnated at levels considerably higher, exacerbated by persistent regional heterogeneities across the country.\cite{unigme2025, brasil2024saes} This trend is further compounded by the systematic underreporting of rare diseases, which represent a significant, yet poorly documented, epidemiological burden on infant and child mortality in Brazil. Short Bowel Syndrome (SBS) and Ultra Short Bowel Syndrome (USBS), the main cause of Chronic Intestinal Failure (CIF), exemplifies the clinical and analytical complexities of this landscape; the survival and development of these patients are contingent upon prolonged parenteral support.\cite{modi2022aspen, elfadil2025ultra} Internationally, the scale of the challenge is well-documented---with incidence rates of 0.25 per 1,000 live births (reaching 7 cases per 1,000 among low birth weight - $<$ 1500 g). \cite{caporilli2023overview, cole2008very, alene2022time} Furthermore, numerous recent studies have conducted comprehensive national prevalence assessments, providing robust epidemiological data across diverse countries.\cite{wales2004neonatal, beath2011trends, puttonen2023pediatric} In Brazil, however, data on the prevalence and geographical distribution of SBS and CIF remain entirely elusive. This profound statistical void is unlikely to reflect a low epidemiological incidence; instead, it points to a significant underestimation, masking chronic barriers to diagnosis and treatment that preclude the development of effective public policies and care networks.\cite{brasil2024saes, leite2025multicenter}
 
 To address this data gap, this study aims to establish the first nationwide prevalence estimate of CIF among children and adolescents (aged 0--17) in Brazil. To our knowledge, this is the first analysis of its kind to be conducted in this pediatric population.\cite{khokhar2025global} Given the absence of a unique ICD-10 code\cite{who2016icd10} for the syndrome within public databases, we developed a novel identification strategy based on hospital billing records (DATASUS/SIH \citep{datasus_sihsus}) spanning from 2017 to 2025. Patients were identified through longitudinal records of Parenteral Nutrition procedures lasting 60 days or longer. To overcome the challenges of anonymized hospital admission data (AIH), we implemented a deterministic matching algorithm to identify unique patients by combining their residential ZIP code, sex, and date of birth.
 
-Our findings extend the current international literature by providing one of the few large-scale prevalence estimates derived from administrative records in a middle-income, continental-sized nation. While recent clinical studies indicate that achieving enteral autonomy \cite{leite2025multicenter} and favorable outcomes following intestinal transplantation \cite{boteon2024multicentric} are feasible in the Brazilian context, such success remains contingent upon prompt referral and the rigorous prevention of associated morbidities, including sepsis and liver failure \cite{caporilli2023overview, elicit2025developing, cleminson2025gut}. By quantifying the extent of spatial underreporting, we address a critical structural gap in the literature, identifying where and how patients effectively `disappear' from health system registries before accessing high-complexity care. Furthermore, our analysis underscores the substantial social and psychological burden placed upon caregivers---a dimension of the condition that has frequently been overlooked in existing research. \cite{feng2026quality}
+Our findings extend the current international literature by providing one of the few large-scale prevalence estimates derived from administrative records in a middle-income, continental-sized nation. While recent clinical studies indicate that achieving enteral autonomy \cite{leite2025multicenter} and favorable outcomes following intestinal transplantation \cite{boteon2024multicentric} are feasible in the Brazilian context, such success remains contingent upon prompt referral and the rigorous prevention of associated morbidities, including sepsis and liver failure \cite{caporilli2023overview, pironi2023espen, cleminson2025gut}. By quantifying the extent of spatial underreporting, we address a critical structural gap in the literature, identifying where and how patients effectively `disappear' from health system registries before accessing high-complexity care. Furthermore, our analysis underscores the substantial social and psychological burden placed upon caregivers---a dimension of the condition that has frequently been overlooked in existing research. \cite{feng2026quality}
 
 For healthcare providers and policymakers, these insights offer a valuable contribution to identifying potential service gaps, thereby supporting future research and public health initiatives. Although our findings are subject to the inherent limitations of administrative data, the estimated prevalence rates are markedly lower than those established in the international literature.\cite{khokhar2025global} This clinical and administrative underestimation appears to have been exacerbated during the COVID-19 pandemic; the failure of referral rates to recover to pre-pandemic levels suggests a potential `hidden mortality' among patients lacking essential clinical support. Furthermore, our analysis reveals substantial geographic inequities: the majority of patients must cross municipal boundaries, traveling an average of 70 km to reach a facility equipped to provide the necessary nutritional care.
 
