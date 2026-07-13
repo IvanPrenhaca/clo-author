@@ -329,22 +329,5 @@ Suggested internal validation:
 \bottomrule
 \end{longtable}
 
-%======================================================================
-\section*{Blocker}
-%======================================================================
-\texttt{scripts/} is empty and no SIH-SUS extract is in \texttt{data/}. Every item above needs
-either the analysis code or the underlying data extract brought into the project. Once present,
-the \texttt{coder} $+$ \texttt{data-engineer} agents can implement all seven MUSTs and
-regenerate the affected tables (\texttt{tab:pn\_17anos}, \texttt{tab:prevalencia\_17anos}) and
-figures (esp.\ \texttt{fig:obito}).
-
-\medskip
-\textbf{Related files.}
-\begin{itemize}[leftmargin=*, topsep=2pt]
-  \item \texttt{quality\_reports/reviews/editorial\_decision.md} --- full MUST/SHOULD/MAY list
-  \item \texttt{quality\_reports/reviews/cif-brazil\_referee\_domain.md}
-  \item \texttt{quality\_reports/reviews/cif-brazil\_referee\_methods.md}
-  \item Text fixes already applied: commit \texttt{ed3d7e0}
-\end{itemize}
 
 \end{document}
