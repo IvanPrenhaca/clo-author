@@ -22,6 +22,6 @@ $xelatex = 'xelatex -interaction=nonstopmode %O %S';
 $out_dir = 'build';
 $aux_dir = 'build';
 
-# Copy the finished PDF from build/ back to paper/main.pdf
-$success_cmd = 'cp %Y%R.pdf %R.pdf';
-$compiling_cmd = '';
+# Copy the finished PDF from build/ back to paper/main.pdf so it sits next to
+# the source. Explicit relative paths avoid Windows quoting issues with %Y/%R.
+$success_cmd = 'cp build/main.pdf main.pdf';
