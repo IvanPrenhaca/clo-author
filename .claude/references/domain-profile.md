@@ -9,8 +9,12 @@ If no field is specified, agents default to applied economics.
 
 ## Field
 
-**Primary:** [e.g., Health Economics, Labor Economics, Development, IO, Public Finance]
-**Adjacent subfields:** [e.g., Labor, Public, IO — fields whose methods and journals overlap]
+**Primary:** Health Economics
+**Adjacent subfields:** Public Finance, Labor, Development <!-- [to confirm] adjust once main.tex is in -->
+<!-- Context: "sabara" likely refers to a Brazilian pediatric hospital setting (Hospital Infantil Sábara / São Paulo). Confirm and refine geography and population below. -->
+
+**Geography / setting:** Brazil (health system) <!-- [to confirm] -->
+**Population:** [to confirm — e.g., pediatric patients, hospital admissions]
 
 ---
 
@@ -18,12 +22,13 @@ If no field is specified, agents default to applied economics.
 
 <!-- The Orchestrator uses this for journal selection. The Librarian prioritizes these in searches. -->
 
+<!-- [to confirm] Health-economics defaults below — reorder/replace for your actual target. -->
 | Tier | Journals |
 |------|----------|
 | Top-5 | AER, Econometrica, JPE, QJE, REStud |
-| Top field | [e.g., JHE, RAND JE, AEJ:EP, AEJ:Applied] |
-| Strong field | [e.g., Health Affairs, AJHE, JPubE, JHR] |
-| Specialty | [e.g., Medical Care, Health Services Research] |
+| Top field | JHE (Journal of Health Economics), AEJ:Applied, AEJ:EP, RAND JE |
+| Strong field | AJHE (American Journal of Health Economics), JPubE, JHR, J. Development Economics |
+| Specialty | Health Affairs, Medical Care, Health Services Research, Social Science & Medicine |
 
 ---
 

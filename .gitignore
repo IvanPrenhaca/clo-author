@@ -17,9 +17,12 @@
 *.synctex.gz
 *.run.xml
 *-blx.bib
+*.xdv
 
-# Compiled PDFs (uncomment to track specific PDFs)
-# *.pdf
+# Compiled PDFs — ignore the built manuscript, but keep source PDFs
+# (e.g. references/*.pdf are literature we want tracked)
+paper/main.pdf
+paper/**/*.pdf
 
 # Python
 __pycache__/

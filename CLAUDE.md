@@ -5,9 +5,9 @@
      Keep this file under ~150 lines — Claude loads it every session.
      See the guide at https://hugosantanna.github.io/clo-author/ for full documentation. -->
 
-**Project:** [YOUR PROJECT NAME]
+**Project:** 2025 Sábara <!-- [confirm exact title] -->
 **Institution:** [YOUR INSTITUTION]
-**Field:** [YOUR FIELD — Economics by default. Can be adapted to Finance, Accounting, Marketing, etc.]
+**Field:** Health Economics
 **Branch:** main
 
 ---
@@ -134,7 +134,7 @@ Output organization: by-script
 
 | Component | File | Status | Description |
 |-----------|------|--------|-------------|
-| Paper | `paper/main.tex` | [draft/submitted/R&R] | [Brief description] |
-| Data | `scripts/R/` | [complete/in-progress] | [Analysis description] |
-| Replication | `paper/replication/` | [not started/ready] | [Deposit status] |
-| Job Market Talk | `paper/talks/job_market_talk.tex` | -- | [Status] |
+| Paper | `paper/main.tex` | draft (existing) | Manuscript imported from prior draft — text, tables, figures |
+| Data | `scripts/R/` | not started | R analysis (default language) |
+| Replication | `paper/replication/` | not started | Deposit status |
+| Talk | `paper/talks/` | not started | -- |
