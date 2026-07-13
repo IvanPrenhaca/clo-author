@@ -25,7 +25,13 @@
 \usepackage{float}          % enables the [H] float placement used below
 \usepackage[margin=1in]{geometry}
 \usepackage[round,authoryear]{natbib}   % citation engine (\cite, \citep, \citet)
-\usepackage{hyperref}
+
+% Traditional blue citation/link text, no colored boxes around links.
+\definecolor{citeblue}{RGB}{0,0,255}
+\usepackage[colorlinks=true,
+            allcolors=citeblue,   % citations, refs, and URLs in blue
+            breaklinks=true]{hyperref}
+\usepackage{url}
 \def\UrlBreaks{\do\/\do-}
 
 % Figures live in paper/figures/ (relative to this file)
