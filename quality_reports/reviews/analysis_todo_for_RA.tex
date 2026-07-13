@@ -1,0 +1,444 @@
+\documentclass[11pt,a4paper]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Data-Analysis To-Do — response to reviewer comments
+%% Standalone: no external files, no bibliography.
+%% Compile with:   pdflatex analysis_todo_for_RA.tex   (run twice)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{listings}
+
+\definecolor{citeblue}{RGB}{0,0,255}
+\usepackage[colorlinks=true, allcolors=citeblue, breaklinks=true]{hyperref}
+
+% ---- Recurring block styles (framed pkg only; no extra dependencies) ----
+\definecolor{quotebg}{RGB}{238,242,248}
+\definecolor{rulegray}{RGB}{170,170,170}
+\definecolor{codebg}{RGB}{246,246,242}
+
+% Reviewer-quote block: light blue, thin left rule, italic
+\newenvironment{reviewer}%
+  {\def\FrameCommand{{\color{rulegray}\vrule width 1.5pt}\hspace{6pt}%
+     \colorbox{quotebg}}%
+   \MakeFramed{\advance\hsize-\width \FrameRestore}\small\itshape}%
+  {\endMakeFramed}
+
+% R code style
+\lstdefinestyle{rstyle}{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{rulegray},
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  aboveskip=6pt, belowskip=6pt,
+  xleftmargin=4pt, xrightmargin=2pt,
+}
+\lstnewenvironment{Rcode}{\lstset{style=rstyle,language=R}}{}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% Little labels
+\newcommand{\why}{\textbf{Why it matters.}\ }
+\newcommand{\task}{\textbf{Your task.}\ }
+\newcommand{\done}{\textbf{Done when.}\ }
+\newcommand{\out}{\textbf{Deliverable.}\ }
+
+\title{\textbf{Data-Analysis To-Do: Responding to the Reviewers}\\[3pt]
+\large Chronic Intestinal Failure in Brazil --- Prevalence Study}
+\author{Internal working note for the analyst}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Read this first}
+
+The manuscript received a \textbf{Major Revision}. Most of the reviewers' concerns are not
+about writing --- they are about the \emph{numbers}: how they were computed, what they mean,
+and how much uncertainty surrounds them. The text-level edits (wording, framing, definitions)
+are being handled separately. \textbf{This note is only the data-analysis work}, i.e.\ the
+tasks that require going back to the SIH-SUS data and the analysis scripts and re-running or
+extending them.
+
+Three practical notes before you start:
+
+\begin{itemize}[leftmargin=*, topsep=2pt]
+  \item The quotes below are labelled \emph{Reviewer 1 (clinical)}, \emph{Reviewer 2 (methods)},
+        and \emph{Editor}. This was an internal pre-submission mock review, so the wording is
+        illustrative --- treat the \emph{substance} as the requirement, not the exact phrasing.
+  \item Every code block is a \textbf{sketch to adapt}, not runnable as-is. Variable and column
+        names (\texttt{cep}, \texttt{sexo}, \texttt{dob}, \texttt{ano}, \texttt{diarias}, \dots)
+        are placeholders --- match them to the real dataset.
+  \item Do the tasks roughly in the order given: \S1--\S3 fix the headline number and its
+        uncertainty (highest priority); \S4--\S5 fix internal-consistency problems; \S6--\S7
+        harden the method against reviewer objections.
+\end{itemize}
+
+There is one overarching theme the Editor stated as the single most important revision:
+
+\begin{reviewer}
+``Reconstruct the headline as an honest interval rather than a point estimate: anchor it on the
+unscaled SUS-only floor, add confidence intervals, and flank the 1.55 scaling factor with a
+sensitivity band.''
+\end{reviewer}
+
+\noindent Tasks 1, 2 and 3 together deliver exactly that.
+
+\medskip\hrule\medskip
+
+%======================================================================
+\section{Reconcile the case counts and define the estimand}
+%======================================================================
+
+\why The Results text reports \textbf{971 unique CIF patients} over the whole period, but the
+nine annual case counts in the prevalence table (148, 136, 147, 112, 86, 106, 108, 105, 80)
+\textbf{sum to 1{,}028}. A reader who adds up the column gets a different number from the
+headline $N$, which looks like an arithmetic error.
+
+\begin{reviewer}
+Reviewer 2 (methods): ``the nine annual case counts sum to 1{,}028, but the text reports 971
+unique patients. This is defensible but must be stated explicitly --- otherwise the table
+appears arithmetically inconsistent with the headline $N$.''
+\end{reviewer}
+\begin{reviewer}
+Reviewer 1 (clinical): ``a period prevalence built by summing annual counts double-counts
+persistent patients across years, which is conceptually inconsistent with `unique patients.'\,''
+\end{reviewer}
+
+\task The gap ($1{,}028 - 971 = 57$) is almost certainly patients who have a qualifying
+admission in more than one calendar year, and so are counted once in the overall total but once
+\emph{per year} in the table. Confirm this is the whole story, then state the estimand clearly.
+
+\begin{Rcode}
+# For each unique patient, in how many distinct calendar years do they qualify?
+years_per_patient <- cif_cases |>
+  dplyr::distinct(patient_id, ano) |>
+  dplyr::count(patient_id, name = "n_years")
+
+# Patients qualifying in >= 2 years:
+sum(years_per_patient$n_years >= 2)
+# Extra person-year rows contributed by multi-year patients:
+sum(years_per_patient$n_years) - dplyr::n_distinct(years_per_patient$patient_id)
+# ^ this number should equal 1028 - 971 = 57
+\end{Rcode}
+
+\done The 57-patient discrepancy is fully explained (or, if it is not, the residual is
+investigated and resolved). The Methods state whether the annual figure is a \emph{period
+prevalence} (a patient re-enters each year they qualify) while 971 is the distinct-patient
+total, and a footnote to the prevalence table says the same.
+
+\out One sentence for Methods, one table footnote, and the reconciling number in your analysis
+log.
+
+%======================================================================
+\section{Put confidence intervals on every rate}
+%======================================================================
+
+\why Right now every number --- annual prevalence, the mean, mortality, the ``23\%'' and
+``40\%'' pandemic drops --- is a single point with no uncertainty. With only 80--148 cases per
+year, sampling noise alone is large, and a clinical journal will not accept year-to-year
+``declines'' stated without intervals.
+
+\begin{reviewer}
+Reviewer 2 (methods): ``a Poisson 95\% CI on 80 observed cases is roughly $\pm$22\%. A clinical
+readership will not accept year-over-year `declines' asserted from counts this small without at
+least Poisson/exact intervals.''
+\end{reviewer}
+\begin{reviewer}
+Reviewer 1 (clinical): ``Report exact (Poisson/binomial) confidence intervals for each annual
+prevalence and for mortality.''
+\end{reviewer}
+
+\task Treat each annual case count as Poisson and compute an exact 95\% CI for the \emph{rate}
+per million. Do the same for mortality (binomial). Replace the bare ``23\%/40\% decline'' with a
+\textbf{rate ratio and its CI} (pandemic year vs.\ the pre-pandemic mean).
+
+\begin{Rcode}
+library(epitools)   # pois.exact(); or use stats::poisson.test()
+
+# Annual prevalence per million, with exact Poisson 95% CI
+prev <- annual |>
+  dplyr::mutate(
+    ci  = purrr::map2(cases, pop, ~ epitools::pois.exact(.x, pt = .y)),
+    rate_pm  = purrr::map_dbl(ci, ~ .x$rate  * 1e6),
+    lower_pm = purrr::map_dbl(ci, ~ .x$lower * 1e6),
+    upper_pm = purrr::map_dbl(ci, ~ .x$upper * 1e6)
+  )
+
+# Pandemic effect as a rate ratio with CI (2020 vs pre-pandemic 2017-2019 pooled)
+# rateratio() takes: exposed cases, unexposed cases, exposed PT, unexposed PT
+epitools::rateratio(c(cases_prepandemic, cases_2020),
+                    c(pt_prepandemic,    pt_2020))
+\end{Rcode}
+
+\done The prevalence table has \texttt{lower}/\texttt{upper} columns (or ``estimate
+(95\%~CI)''), mortality is reported with a CI, and every sentence claiming a change over time
+reports a rate ratio with its interval rather than a bare percentage.
+
+\out Updated prevalence table with CI columns; a one-line rate-ratio result for the pandemic
+comparison.
+
+%======================================================================
+\section{Rebuild the headline as a scaling sensitivity band}
+%======================================================================
+
+\why The national estimate multiplies the observed SUS count by a \emph{single fixed} factor of
+1.55 (because 64.6\% of all-cause admissions are SUS-funded). That one number drives the whole
+headline, is never varied, and --- because high-complexity CIF care is concentrated in public
+centres --- probably \emph{overstates} the private share. As written, the reader cannot separate
+the finding from this one assumption.
+
+\begin{reviewer}
+Reviewer 2 (methods): ``the entire non-SUS column is mechanically $0.55\times N_{\text{SUS}}$
+\ldots 1.55 may overstate the private share --- the direction of bias is not even signed. This
+is fatal \emph{as presented}.''
+\end{reviewer}
+\begin{reviewer}
+Editor: ``anchor the estimate on the unscaled SUS-only floor and flank the 1.55 with a
+sensitivity band; report a range, not a single number.''
+\end{reviewer}
+
+\task Recompute prevalence under a \emph{grid} of scaling factors and present the result as a
+range. Promote the \textbf{unscaled, SUS-only} prevalence to the primary, strictly-observed
+lower bound.
+
+\begin{Rcode}
+scaling_grid <- c(SUS_only = 1.00, central = 1.55, upper = 1.80)  # set upper from PNS CI
+
+sens <- tidyr::expand_grid(annual, factor = scaling_grid) |>
+  dplyr::mutate(
+    cases_scaled = cases * factor,
+    prev_pm      = cases_scaled / pop * 1e6
+  ) |>
+  dplyr::group_by(name = names(scaling_grid)[match(factor, scaling_grid)]) |>
+  dplyr::summarise(mean_prev = mean(prev_pm), .groups = "drop")
+# Report: SUS-only (lower bound) -> central (1.55) -> upper, as a range.
+\end{Rcode}
+
+\noindent If you can find \emph{any} disease-specific anchor for the public/private split (for
+example, where the RESTORE, Leite, or Goldani Brazilian cohorts were treated --- these are
+predominantly public centres), use it to justify the endpoints instead of the all-cause split.
+
+\done The primary result is stated as a range (SUS-only floor $\to$ central $\to$ upper), the
+prevalence table shows the SUS-only column as the strict lower bound, and the text explains
+which direction the 1.55 factor likely biases the estimate.
+
+\out A small sensitivity table (prevalence under each scaling assumption) and revised headline
+wording.
+
+%======================================================================
+\section{Check that ``daily units'' (\emph{di\'{a}rias}) equal days}
+%======================================================================
+
+\why The clinical definition is 60 \emph{days} of PN within a 74-day window. The analysis counts
+60 \emph{di\'{a}rias} (a billing unit). If a patient can be billed more than one di\'{a}ria per
+calendar day, the threshold does not map onto the 60-day definition. The table's ``Max daily
+units = 288 in 2020'' is a red flag: 288 is far more than fits in a 74-day window, which
+suggests di\'{a}rias are being accumulated across multiple admissions.
+
+\begin{reviewer}
+Reviewer 1 (clinical): ``the `di\'{a}ria' is a billing unit, not a guaranteed
+one-per-calendar-day count \ldots the 60-di\'{a}ria threshold does not obviously map 1:1 to the
+60-day ASPEN criterion.'' (the single most important validity question)
+\end{reviewer}
+\begin{reviewer}
+Reviewer 2 (methods): ``Max daily units of 288 exceeds what could accrue in a 74-day window; the
+within-admission vs.\ across-admission accumulation is ambiguous.''
+\end{reviewer}
+
+\task Two things. (a) Confirm from the DATASUS data dictionary whether one AIH can bill $>1$ PN
+di\'{a}ria per calendar day, and cite it. (b) Establish, from the code, whether the 60/74 rule
+is applied \emph{within a single admission} or \emph{cumulatively across linked admissions}, and
+make the manuscript say so explicitly.
+
+\begin{Rcode}
+# Diagnostic: distribution of diarias per admission, and the max
+adm |>
+  dplyr::summarise(
+    max_diarias      = max(diarias),
+    p99              = quantile(diarias, 0.99),
+    over_74          = mean(diarias > 74)   # share exceeding a single 74-day window
+  )
+
+# If the rule is cumulative across admissions, make the windowing explicit:
+# for each patient, order admissions by date and test whether >= 60 diarias
+# fall within any 74-consecutive-day window.
+\end{Rcode}
+
+\done The Methods state (i) that a di\'{a}ria corresponds to at most one PN calendar day (with a
+data-dictionary citation) \emph{or} explain the correction if it does not, and (ii) exactly how
+the 74-day window is enforced and whether accumulation is within- or across-admission. The
+``288'' value is explained.
+
+\out A short Methods paragraph on the di\'{a}ria$\to$day mapping and windowing rule; the
+diagnostic numbers in your log.
+
+%======================================================================
+\section{Fix the mortality figure so it refers to the CIF cohort}
+%======================================================================
+
+\why Three different mortality numbers appear for what looks like the same group: the abstract
+says ``9\% to 15\%,'' the Results say ``6.5\% died'' among the 971 CIF patients, and the first
+table's 11.9--15\% is actually the death rate among \emph{all} PN admissions, not the CIF
+cohort. The Discussion's comparison to high-income survival ($\geq$85\%) depends on which of
+these is the real CIF-cohort mortality.
+
+\begin{reviewer}
+Reviewer 1 (clinical): ``the `9--15\%' quoted for CIF appears to borrow the all-PN mortality
+column \ldots a reader cannot tell whether CIF-cohort mortality is $\sim$6.5\% or $\sim$9--15\%.''
+\end{reviewer}
+
+\task Compute in-hospital mortality \emph{on the 971-patient CIF cohort only} --- overall and by
+year (the by-year version is what the mortality figure should show) --- and then use that one
+number consistently in the abstract, Results, and Discussion.
+
+\begin{Rcode}
+# Cohort-level mortality: did the patient die in ANY qualifying admission?
+cohort_mort <- cif_cases |>
+  dplyr::group_by(patient_id) |>
+  dplyr::summarise(died = as.integer(any(death == 1)), ano = min(ano), .groups = "drop")
+
+# Overall, with a binomial CI:
+d <- sum(cohort_mort$died); n <- nrow(cohort_mort)
+binom.test(d, n)            # estimate + 95% CI
+
+# By year (for the mortality figure):
+cohort_mort |>
+  dplyr::group_by(ano) |>
+  dplyr::summarise(mortality = mean(died), n = dplyr::n())
+\end{Rcode}
+
+\done One CIF-cohort mortality figure (with CI) is used everywhere; the mortality figure is
+regenerated from the cohort, not from all PN admissions; the abstract no longer says ``9--15\%''
+if that was the all-PN number.
+
+\out Corrected mortality number + CI; regenerated by-year mortality figure.
+
+%======================================================================
+\section{Quantify the missing-postal-code exclusion and test it for bias}
+%======================================================================
+
+\why Admissions with a missing postal code (CEP) are dropped because they cannot be linked, but
+the paper never says how many. This matters a lot: if missing CEP is more common in the
+under-served North/Northeast/Central-West --- exactly the regions the paper says are
+under-represented --- then the exclusion could be \emph{manufacturing} the headline
+access-inequity result rather than revealing it.
+
+\begin{reviewer}
+Reviewer 2 (methods): ``if missingness is concentrated in the regions claimed to be
+under-represented, the exclusion mechanically reinforces the paper's conclusion, and the
+`lower bound' framing may be partly an artefact of the exclusion.''
+\end{reviewer}
+
+\task Report how many admissions/patients were dropped for missing CEP, \emph{overall and by
+region}, and compare the dropped vs.\ kept admissions on the variables you do observe.
+
+\begin{Rcode}
+# How big is the exclusion, and is it regionally patterned?
+adm_all |>
+  dplyr::mutate(cep_missing = is.na(cep) | cep == "") |>
+  dplyr::group_by(regiao) |>
+  dplyr::summarise(
+    n            = dplyr::n(),
+    pct_missing  = mean(cep_missing),
+    .groups = "drop"
+  )
+
+# Compare kept vs dropped on observables (age, region, death)
+adm_all |>
+  dplyr::mutate(dropped = is.na(cep) | cep == "") |>
+  dplyr::group_by(dropped) |>
+  dplyr::summarise(mean_age = mean(idade), death_rate = mean(death),
+                   dplyr::across(regiao, ~ list(table(.))))
+\end{Rcode}
+
+\done The Methods/Results report the number and percentage excluded (overall and by region), a
+kept-vs-dropped comparison, and a sentence on whether the exclusion could bias the geographic
+conclusion --- ideally with a best-/worst-case bound on the headline.
+
+\out Exclusion counts by region; a short bias paragraph; optionally a bounding sensitivity.
+
+%======================================================================
+\section{Estimate the linkage (twin) error and validate against the 2024 code}
+%======================================================================
+
+\why The patient-matching rule collapses admissions that share postal code, sex, and date of
+birth into one ``patient.'' Twins --- who are over-represented among premature neonates, the
+dominant group here --- share all three, so the rule will merge them and \emph{undercount}
+cases. The size of this effect is currently unknown. Separately, the 22 patients found under the
+new 2024 CIF-specific code are a natural way to check the main algorithm.
+
+\begin{reviewer}
+Reviewer 2 (methods): ``same CEP, same DOB, often same sex --- the rule merges twins into one
+patient, biasing the count downward in exactly the prematurity-driven population that
+constitutes the sample. Also: check agreement between the linkage and the 2024-code
+deduplication on the 22 code-identified patients.''
+\end{reviewer}
+
+\task (a) Bound the twin/false-merge effect by counting triplets that plausibly represent
+multiple births. (b) Cross-check: of the 22 patients found via the 2024 CIF-specific code, how
+many does the main PN algorithm independently flag?
+
+\begin{Rcode}
+# (a) Potential multiple-birth collisions: same DOB + CEP + sex, >1 admission cluster
+collisions <- cif_cases |>
+  dplyr::count(dob, cep, sexo, name = "n_records") |>
+  dplyr::filter(n_records > 1)
+nrow(collisions)                      # clusters that MIGHT be merged twins
+# Sensitivity: recount treating each flagged cluster as 2 patients instead of 1.
+
+# (b) Overlap with the 2024 CIF-specific-code patients
+dplyr::intersect(pn_algo_patients$patient_id, code2024_patients$patient_id) |> length()
+# Report: of 22 code-identified patients, how many the PN rule also captures.
+\end{Rcode}
+
+\done The Methods/Limitations report an estimated false-merge (twin) rate with a recount
+sensitivity, and the Results report the overlap between the PN algorithm and the 22
+code-identified patients. The linkage precedent is described as ``applied elsewhere to Brazilian
+administrative data,'' not as validated for this specific population.
+
+\out A false-merge bound (n clusters; recount under the 2-per-cluster assumption); the
+22-patient overlap number.
+
+%======================================================================
+\section*{Summary checklist}
+%======================================================================
+
+\begin{longtable}{@{}c p{5.2cm} p{6.0cm}@{}}
+\toprule
+\textbf{\#} & \textbf{Task} & \textbf{Deliverable} \\
+\midrule
+\endhead
+1 & Reconcile 1{,}028 vs 971; define estimand & Methods sentence + table footnote \\
+2 & Confidence intervals on all rates & Prevalence table with CI columns; pandemic rate ratio \\
+3 & Scaling sensitivity band & Sensitivity table; SUS-only floor as primary; headline as a range \\
+4 & \emph{di\'{a}rias} $=$ days? windowing rule & Methods paragraph + data-dictionary citation \\
+5 & CIF-cohort mortality (not all-PN) & Corrected number + CI; regenerated by-year figure \\
+6 & Missing-CEP exclusion \& bias check & Exclusion counts by region + bias paragraph \\
+7 & Twin/linkage error + 2024-code overlap & False-merge bound + 22-patient overlap \\
+\bottomrule
+\end{longtable}
+
+\noindent\textbf{Priority order:} 1--3 first (they fix the headline number and its
+uncertainty), then 4--5 (internal consistency), then 6--7 (defending the method). Keep a short
+analysis log recording each number you produce and the script/line that produced it --- the
+reviewers will expect every figure in the revised paper to be traceable to code.
+
+\end{document}
